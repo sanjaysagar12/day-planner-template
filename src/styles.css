@@ -110,3 +110,4 @@ h1::before { content: ''; width: 10px; height: 10px; border-radius: var(--r); ba
 .help { flex: none; width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--r); background: transparent; color: var(--fg); cursor: pointer; }
 .help:hover { border-color: var(--accent); }
 .help svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.help:disabled { opacity: .35; cursor: not-allowed; } .help:disabled:hover { border-color: var(--line); }
