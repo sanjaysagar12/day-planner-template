@@ -7,7 +7,7 @@ import { defaultText, TEXTS, WIDTH_MAX, WIDTH_MIN, type Settings } from '../layo
 const FONT = 'Helvetica, Arial, sans-serif';
 const UPPER = /Head$|^title|^col|^log(Time|What)$|^box\d|^dateLabel$/; // rendered in capitals
 type Edit = { id: string; key: string } | null;
-export interface EditProps { s: Settings; update: (f: (s: Settings) => Settings) => void }
+export interface EditProps { s: Settings; update: (f: (s: Settings) => Settings) => void; sel?: Drag['key']; onSelect?: (d: Drag) => void }
 
 const style = (p: Extract<Prim, { t: 'text' }>) => ({ letterSpacing: p.tc ? `${p.tc}px` : undefined, fontKerning: 'none' as const });
 
@@ -62,7 +62,7 @@ function Editable({ p, id, edit, setEdit, s, update, limit }: { p: Extract<Prim,
 }
 
 // A column divider: drag it (or use the arrow keys) to resize the column next to it.
-function Divider({ p, s, update }: { p: Extract<Prim, { t: 'line' }> } & EditProps) {
+function Divider({ p, s, update, sel, onSelect }: { p: Extract<Prim, { t: 'line' }> } & EditProps) {
   const d = p.drag as Drag, width = s[d.key];
   const [drag, setDrag] = useState(false);
   const set = (w: number) => update((q) => ({ ...q, [d.key]: Math.round(w) }));
@@ -72,12 +72,13 @@ function Divider({ p, s, update }: { p: Extract<Prim, { t: 'line' }> } & EditPro
     return pt.matrixTransform(svg.getScreenCTM()!.inverse()).x;
   };
   return (
-    <g className={`divider${drag ? ' dragging' : ''}`}>
+    <g className={`divider${drag ? ' dragging' : ''}${sel === d.key ? ' selected' : ''}`}>
       <line x1={p.x1} y1={p.y1} x2={p.x2} y2={p.y2} stroke={p.c} strokeWidth={p.w} />
       <line className="grip" x1={p.x1} y1={p.y1} x2={p.x2} y2={p.y2} />
       <rect x={p.x1 - 6} y={p.y1} width={12} height={p.y2 - p.y1} fill="transparent" tabIndex={0} role="separator" aria-orientation="vertical"
         aria-label={`Resize ${d.label} column`} aria-valuemin={WIDTH_MIN} aria-valuemax={WIDTH_MAX} aria-valuenow={width} aria-valuetext={`${width} points`}
-        onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); setDrag(true); }}
+        onFocus={() => onSelect?.(d)}
+        onPointerDown={(e) => { onSelect?.(d); e.currentTarget.setPointerCapture(e.pointerId); setDrag(true); }}
         onPointerMove={(e) => { if (drag) set(d.sign * (toX(e) - d.anchor)); }}
         onPointerUp={() => setDrag(false)} onPointerCancel={() => setDrag(false)}
         onKeyDown={(e) => {

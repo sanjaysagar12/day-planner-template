@@ -4,7 +4,8 @@ import { measure } from '../layout/measure';
 import type { Settings } from '../layout/settings';
 import { defaultSettings } from '../layout/settings';
 import { loadSettings, saveSettings } from '../store';
-import { Bar, TemplateSwitch } from './Bar';
+import type { Drag } from '../layout/spec';
+import { Bar, ResizeBar, TemplateSwitch } from './Bar';
 import { Preview } from './Preview';
 import { seenTour, Tour } from './Tour';
 
@@ -12,6 +13,7 @@ export default function App() {
   const [s, setS] = useState<Settings>(loadSettings);
   const [previewing, setPreviewing] = useState(false);
   const [touring, setTouring] = useState(() => !seenTour());
+  const [sel, setSel] = useState<Drag | null>(null);
   const cur = useRef(s), hist = useRef<Settings[]>([]), last = useRef(0);
   const [canUndo, setCanUndo] = useState(false);
   cur.current = s;
@@ -53,8 +55,9 @@ export default function App() {
           </button>
         </div>
       </header>
-      <Preview layout={lay} s={s} update={update} previewing={previewing} />
+      <Preview layout={lay} s={s} update={update} previewing={previewing} sel={sel?.key} onSelect={setSel} />
       {touring && !previewing && <Tour onClose={() => setTouring(false)} />}
+      {sel && !touring && !previewing && <ResizeBar d={sel} width={s[sel.key]} update={update} onClose={() => setSel(null)} />}
       <Bar s={s} previewing={previewing} setPreviewing={setPreviewing} />
     </div>
   );

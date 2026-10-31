@@ -111,3 +111,22 @@ h1::before { content: ''; width: 10px; height: 10px; border-radius: var(--r); ba
 .help:hover { border-color: var(--accent); }
 .help svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .help:disabled { opacity: .35; cursor: not-allowed; } .help:disabled:hover { border-color: var(--line); }
+
+/* selected column line: move left / right */
+.divider.selected .grip { stroke: #8a05ff; }
+.resizebar { position: fixed; left: 50%; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 76px); transform: translateX(-50%); z-index: 11; width: min(440px, calc(100% - 24px)); display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--panel); border: 1px solid var(--ink); border-radius: var(--r); }
+.rb-t { flex: 1 1 auto; min-width: 0; font-size: 13px; color: var(--muted); }
+.rb-t b { font-family: var(--mono); font-weight: 400; color: var(--accent); margin-left: 4px; white-space: nowrap; }
+.resizebar button { font: inherit; font-size: 14px; font-weight: 500; min-height: 40px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--ink); border-radius: var(--r); background: transparent; color: var(--fg); cursor: pointer; }
+.resizebar button:hover { border-color: var(--accent); }
+.resizebar svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.resizebar .rb-x { border-color: transparent; padding: 6px; }
+@media (max-width: 560px) { .rb-t { flex-basis: 100%; } .resizebar { flex-wrap: wrap; } .resizebar button:not(.rb-x) { flex: 1; justify-content: center; } }
+
+/* mobile preview: keep the PDF's spreads (review | next day, log | log continued), shrunk to fit */
+@media (max-width: 699px) {
+  .previewing .sheets { padding: 8px; gap: 8px; }
+  .previewing .spread { grid-template-columns: 1fr 1fr; gap: 0; background: #fff; border: 1px solid var(--line); }
+  .previewing .page { border: 0; }
+  .previewing .cl { display: inline; }
+}

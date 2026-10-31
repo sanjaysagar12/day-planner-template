@@ -1,3 +1,4 @@
+import type { Drag } from '../layout/spec';
 import type { Settings } from '../layout/settings';
 import { downloadTemplate } from '../pdf/export'; // imported up front so it also works offline after load
 
@@ -35,5 +36,23 @@ export function Bar({ s, previewing, setPreviewing }: { s: Settings; previewing:
         <span>Download<span className="long"> template</span></span>
       </button>
     </nav>
+  );
+}
+
+// Appears above the bottom bar once a column line is selected: nudge it left or right without dragging.
+export function ResizeBar({ d, width, update, onClose }: { d: Drag; width: number; update: Update; onClose: () => void }) {
+  const move = (dir: number, big: boolean) => update((q) => ({ ...q, [d.key]: q[d.key] + dir * d.sign * (big ? 5 : 1) }));
+  const btn = (dir: number, label: string, path: string) => (
+    <button type="button" onClick={(e) => move(dir, e.shiftKey)} title={`${label} (Shift: bigger steps)`}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={path} /></svg><span>{label}</span>
+    </button>
+  );
+  return (
+    <div className="resizebar" role="group" aria-label={`Resize ${d.label} column`}>
+      <span className="rb-t">{d.label} column <b>{width} pt</b></span>
+      {btn(-1, 'Move left', 'M15 5l-7 7 7 7')}
+      {btn(1, 'Move right', 'M9 5l7 7-7 7')}
+      <button type="button" className="rb-x" onClick={onClose} aria-label="Close column resizer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+    </div>
   );
 }
