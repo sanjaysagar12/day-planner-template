@@ -1,11 +1,11 @@
 import { defineConfig, envField } from 'astro/config';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 
 // Static pages; only /api/collect runs on the server (it holds the Google credentials from .env).
 export default defineConfig({
   output: 'static',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   integrations: [react()],
   env: {
     schema: {
