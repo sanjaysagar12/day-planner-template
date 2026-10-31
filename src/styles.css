@@ -130,3 +130,16 @@ h1::before { content: ''; width: 10px; height: 10px; border-radius: var(--r); ba
   .previewing .page { border: 0; }
   .previewing .cl { display: inline; }
 }
+
+/* first-download question */
+.ask { width: min(420px, calc(100% - 24px)); padding: 24px; border: 1px solid var(--ink); border-radius: var(--r); background: var(--panel); color: var(--fg); }
+.ask::backdrop { background: rgb(13 13 13 / .45); }
+.ask h2 { margin: 0 0 8px; font-size: 20px; font-weight: 300; letter-spacing: -.01em; line-height: 1.33; }
+.ask p { margin: 0 0 16px; font-size: 14px; line-height: 1.43; color: var(--muted); }
+.ask label { display: grid; gap: 6px; margin-bottom: 16px; font-size: 14px; font-weight: 500; }
+.ask input { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--fg); }
+.ask input:focus { border-color: var(--ink); }
+.ask .ask-err { color: #b42318; margin: -8px 0 16px; }
+.ask .tour-b button:first-child { margin-right: auto; }
+.tour-b button:disabled { opacity: .4; cursor: not-allowed; }
+.ask select { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--fg); }

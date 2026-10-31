@@ -2,3 +2,5 @@ node_modules
 dist
 .astro
 tools/out
+.env
+general-projects-*.json
